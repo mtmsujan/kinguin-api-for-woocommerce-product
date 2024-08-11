@@ -70,6 +70,16 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-kinguin-api-for-woocommerc
 require plugin_dir_path( __FILE__ ) . 'admin/kinguin-api-for-wordpress-admin-page.php';
 
 /**
+ * fetch-api-products-import-to-db file
+ */
+require plugin_dir_path( __FILE__ ) . 'admin/fetch-api-products-import-to-db.php';
+
+/**
+ * API Endpoints
+ */
+require plugin_dir_path( __FILE__ ) . 'admin/api_endpoints.php';
+
+/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks,
