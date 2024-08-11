@@ -1,13 +1,15 @@
 <?php
 
 // TRUNCATE Table
-function kapi_truncate_table( $table_name ) {
+function kapi_truncate_table($table_name)
+{
     global $wpdb;
-    $wpdb->query( "TRUNCATE TABLE $table_name" );
+    $wpdb->query("TRUNCATE TABLE $table_name");
 }
 
 // Fetch products from the API
-function kapi_fetch_products_from_api($page = 1){
+function kapi_fetch_products_from_api($page = 1)
+{
     $api_key = get_option('kinguin_api_key') ?? '';
     $api_url = get_option('kinguin_base_url') ?? '';
 
@@ -46,11 +48,11 @@ function kapi_insert_products_into_db()
     // Get total number of products
     $total_products = get_option('kinguin_total_products') ?? 0;
     $current_page = get_option('kinguin_current_page') ?? 1;
-    
+
     // calculate total number of pages
     $total_pages = ceil($total_products / 100);
-    
-    for($page = $current_page; $page <= $total_pages; $page++) {
+
+    for ($page = $current_page; $page <= $total_pages; $page++) {
 
         // Fetch products from the API
         $api_response = kapi_fetch_products_from_api($page);
@@ -85,8 +87,8 @@ function kapi_insert_products_into_db()
             }
         }
     }
-        
-    
+
+
 
     return "Kinguin Id inserted into database";
 }
