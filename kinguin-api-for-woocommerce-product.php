@@ -64,6 +64,8 @@ register_deactivation_hook( __FILE__, 'deactivate_kinguin_api_for_woocommerce_pr
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-kinguin-api-for-woocommerce-product.php';
 
+require plugin_dir_path( __FILE__ ) . 'admin/kinguin-api-for-wordpress-admin-page.php';
+
 /**
  * Begins execution of the plugin.
  *
