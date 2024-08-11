@@ -67,28 +67,28 @@ function kinguin_base_url_callback() {
     ?>
     <p>
         <strong><?php _e('Production', 'kinguin-api-for-woocommerce-product'); ?>:</strong>
-        <a href="https://www.kinguin.net/integration/" target="_blank">https://www.kinguin.net/integration/</a>
+        <a href=" https://gateway.kinguin.net" target="_blank"> https://gateway.kinguin.net</a>
     </p>
     <p>
         <strong><?php _e('Sandbox', 'kinguin-api-for-woocommerce-product'); ?>:</strong>
-        <a href="https://www.sandbox.kinguin.net/integration/" target="_blank">https://www.sandbox.kinguin.net/integration/</a>
+        <a href=" https://gateway.sandbox.kinguin.net" target="_blank"> https://gateway.sandbox.kinguin.net</a>
     </p>
     <?php
 }
 
 function kinguin_api_key_callback() {
     $value = esc_attr(get_option(KINGUIN_API_KEY_OPTION));
-    echo '<input type="text" name="' . KINGUIN_API_KEY_OPTION . '" value="' . $value . '" class="regular-text" />';
+    echo '<input type="password" name="' . KINGUIN_API_KEY_OPTION . '" value="' . $value . '" class="regular-text" />';
 }
 
 function woocommerce_client_id_callback() {
     $value = esc_attr(get_option(WOOCOMMERCE_CLIENT_ID_OPTION));
-    echo '<input type="text" name="' . WOOCOMMERCE_CLIENT_ID_OPTION . '" value="' . $value . '" class="regular-text" />';
+    echo '<input type="password" name="' . WOOCOMMERCE_CLIENT_ID_OPTION . '" value="' . $value . '" class="regular-text" />';
 }
 
 function woocommerce_client_secret_callback() {
     $value = esc_attr(get_option(WOOCOMMERCE_CLIENT_SECRET_OPTION));
-    echo '<input type="text" name="' . WOOCOMMERCE_CLIENT_SECRET_OPTION . '" value="' . $value . '" class="regular-text" />';
+    echo '<input type="password" name="' . WOOCOMMERCE_CLIENT_SECRET_OPTION . '" value="' . $value . '" class="regular-text" />';
 }
 
 function kinguin_profit_percentage_callback() {
