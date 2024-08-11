@@ -93,7 +93,7 @@ function kapi_product_import_to_woocommerce()
 
 
         $product_cheapestOfferId = $product['cheapestOfferId'] ?? [];
-        $product_preorder = $product['isPreorder'] ?? false;
+        $product_preorder = $product['isPreorder'] ?? false; 
         $product_metacriticScore = $product['metacriticScore'] ?? 0;
         $product_regionalLimitations = $product['regionalLimitations'] ?? '';
         $product_regionId = $product['regionId'] ?? 0;
@@ -216,6 +216,9 @@ function kapi_product_import_to_woocommerce()
             // Update product meta data
             update_post_meta($product_id, '_price', $product_price);
 
+            // Update product sale price
+            update_post_meta($product_id, '_sale_price', $product_price);
+
             // Update Product Tags
             if (!empty($product_tags) && is_array($product_tags)) {
                 wp_set_object_terms($product_id, $product_tags, 'product_tag');
@@ -227,18 +230,43 @@ function kapi_product_import_to_woocommerce()
             }
 
             //Update product meta data in WordPress
-            update_post_meta($product_id, '_stock', $product_totalQty);
+            update_post_meta($product_id, '_stock', $product_qty);
 
             //display out of stock message if stock is 0
             update_post_meta($product_id, '_manage_stock', 'yes');
 
-            if ($product_totalQty <= 0) {
+            if ($product_qty <= 0) {
                 update_post_meta($product_id, '_stock_status', 'outofstock');
             } else {
                 update_post_meta($product_id, '_stock_status', 'instock');
             }
 
             kapi_set_product_images($product_id, $converted_product_screenshots);
+
+            // Update Product additional information 
+            update_post_meta($product_id, '_product_developers', json_encode($product_developers));
+            update_post_meta($product_id, '_product_publishers', json_encode($product_publishers));
+            update_post_meta($product_id, '_platform', $platform);
+            update_post_meta($product_id, '_product_releaseDate', $product_releaseDate);
+            update_post_meta($product_id, '_product_textQty', $product_textQty);
+            update_post_meta($product_id, '_product_cheapestOfferId', json_encode($product_cheapestOfferId));
+            update_post_meta($product_id, '_product_preorder', $product_preorder);
+            update_post_meta($product_id, '_product_metacriticScore', $product_metacriticScore);
+            update_post_meta($product_id, '_product_regionalLimitations', $product_regionalLimitations);
+            update_post_meta($product_id, '_product_regionId', $product_regionId);
+            update_post_meta($product_id, '_product_activationDetails', $product_activationDetails);
+            update_post_meta($product_id, '_product_productId', $product_productId);
+            update_post_meta($product_id, '_product_originalName', $product_originalName);
+            update_post_meta($product_id, '_product_videos', json_encode($product_videos));
+            update_post_meta($product_id, '_product_languages', json_encode($product_languages));
+            update_post_meta($product_id, '_product_systemRequirements', json_encode($product_systemRequirements));
+            update_post_meta($product_id, '_product_offers', json_encode($product_offers));
+            update_post_meta($product_id, '_product_offersCount', $product_offersCount);
+            update_post_meta($product_id, '_product_totalQty', $product_totalQty);
+            update_post_meta($product_id, '_product_merchantName', json_encode($product_merchantName));
+            update_post_meta($product_id, '_product_ageRating', $product_ageRating);
+            update_post_meta($product_id, '_product_steam', $product_steam);
+            update_post_meta($product_id, '_product_images', $product_images);
 
             return "Product Import Successfully";
 
