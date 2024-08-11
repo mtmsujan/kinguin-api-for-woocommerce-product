@@ -30,6 +30,16 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// Define plugin path
+if ( !defined( 'KAPI_PLUGIN_PATH' ) ) {
+    define( 'KAPI_PLUGIN_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+}
+
+// Define plugin uri
+if ( !defined( 'KAPI_PLUGIN_URL' ) ) {
+    define( 'KAPI_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+}
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
