@@ -79,6 +79,9 @@ require plugin_dir_path( __FILE__ ) . 'admin/fetch-api-products-import-to-db.php
  */
 require plugin_dir_path( __FILE__ ) . 'admin/api_endpoints.php';
 
+// product-import-to-woocommerce
+require plugin_dir_path( __FILE__ ) . 'admin/product-import-to-woocommerce.php';
+
 /**
  * Begins execution of the plugin.
  *
