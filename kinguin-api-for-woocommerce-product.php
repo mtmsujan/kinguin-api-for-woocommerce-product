@@ -92,6 +92,9 @@ require plugin_dir_path( __FILE__ ) . 'admin/api_endpoints.php';
 // product-import-to-woocommerce
 require plugin_dir_path( __FILE__ ) . 'admin/product-import-to-woocommerce.php';
 
+// Display Product Additional Information
+require plugin_dir_path( __FILE__ ) . 'public/display-product-additional-information.php';
+
 /**
  * Begins execution of the plugin.
  *
