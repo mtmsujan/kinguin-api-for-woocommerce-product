@@ -242,6 +242,24 @@ function kapi_product_import_to_woocommerce()
             }
 
             kapi_set_product_images($product_id, $converted_product_screenshots);
+            // system requirements data Formating 
+            $systemRequirements = array_map(function($item) {
+                $requirements = $item['requirement'];
+                if (count($requirements) == 1) {
+                    $requirements = explode("\n", $requirements[0]);
+                }
+                $newItem = [
+                    "system" => $item['system'],
+                    "requirements" => $requirements
+                ];
+                return $newItem;
+            }, $product_systemRequirements);
+
+            $json_systemRequirements = json_encode($systemRequirements);
+
+            // product activationDetails data Formating
+            $formattedDetails = nl2br(htmlspecialchars($product_activationDetails));
+            
 
             // Update Product additional information 
             update_post_meta($product_id, '_product_developers', json_encode($product_developers));
@@ -254,12 +272,12 @@ function kapi_product_import_to_woocommerce()
             update_post_meta($product_id, '_product_metacriticScore', $product_metacriticScore);
             update_post_meta($product_id, '_product_regionalLimitations', $product_regionalLimitations);
             update_post_meta($product_id, '_product_regionId', $product_regionId);
-            update_post_meta($product_id, '_product_activationDetails', $product_activationDetails);
+            update_post_meta($product_id, '_product_activationDetails', $formattedDetails);
             update_post_meta($product_id, '_product_productId', $product_productId);
             update_post_meta($product_id, '_product_originalName', $product_originalName);
             update_post_meta($product_id, '_product_videos', json_encode($product_videos));
             update_post_meta($product_id, '_product_languages', json_encode($product_languages));
-            update_post_meta($product_id, '_product_systemRequirements', json_encode($product_systemRequirements));
+            update_post_meta($product_id, '_product_systemRequirements', $json_systemRequirements);
             update_post_meta($product_id, '_product_offers', json_encode($product_offers));
             update_post_meta($product_id, '_product_offersCount', $product_offersCount);
             update_post_meta($product_id, '_product_totalQty', $product_totalQty);
