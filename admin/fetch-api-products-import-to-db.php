@@ -8,8 +8,9 @@ function kapi_truncate_table($table_name)
 }
 
 // Fetch products from the API
-function kapi_fetch_products_from_api($page = 1)
+function kapi_fetch_products_from_api($page = 1): string
 {
+    $page = $page == 0 ? 1 : $page;
     $api_key = get_option('kinguin_api_key') ?? '';
     $api_url = get_option('kinguin_base_url') ?? '';
 
@@ -46,8 +47,8 @@ function kapi_insert_products_into_db()
 {
 
     // Get total number of products
-    $total_products = get_option('kinguin_total_products') ?? 0;
-    $current_page = get_option('kinguin_current_page') ?? 1;
+    $total_products = (int) get_option('kinguin_total_products') ?? 0;
+    $current_page = (int) get_option('kinguin_current_page') ?? 1;
 
     // calculate total number of pages
     $total_pages = ceil($total_products / 100);
@@ -56,10 +57,15 @@ function kapi_insert_products_into_db()
 
         // Fetch products from the API
         $api_response = kapi_fetch_products_from_api($page);
-        $api_response = json_decode($api_response, true);
-        $products = $api_response['results'];
+        $data = json_decode($api_response, true);
+        if (!array_key_exists('results', $data)) {
+            return $api_response;
+        }
+        $products = $data['results'];
 
-        $_total_products = $api_response['item_count'];
+
+
+        $_total_products = $data['item_count'];
         // Update total number of products
         update_option('kinguin_total_products', $_total_products);
 

@@ -93,7 +93,7 @@ function kapi_product_import_to_woocommerce()
 
 
         $product_cheapestOfferId = $product['cheapestOfferId'] ?? [];
-        $product_preorder = $product['isPreorder'] ?? false; 
+        $product_preorder = $product['isPreorder'] ?? false;
         $product_metacriticScore = $product['metacriticScore'] ?? 0;
         $product_regionalLimitations = $product['regionalLimitations'] ?? '';
         $product_regionId = $product['regionId'] ?? 0;
@@ -112,7 +112,7 @@ function kapi_product_import_to_woocommerce()
         }
 
         // Merge Thumbnail Image with Screenshots
-        $converted_product_screenshots = array_merge([$thumbnail_image], $converted_product_screenshots);
+        // $converted_product_screenshots = array_merge([$thumbnail_image], $converted_product_screenshots);
 
         $product_videos = $product['videos'] ?? [];
         $product_languages = $product['languages'] ?? [];
@@ -242,8 +242,12 @@ function kapi_product_import_to_woocommerce()
             }
 
             kapi_set_product_images($product_id, $converted_product_screenshots);
+
+            // set Thumbnail image for product function
+            
+            set_featured_image_for_product($product_id, $thumbnail_image);
             // system requirements data Formating 
-            $systemRequirements = array_map(function($item) {
+            $systemRequirements = array_map(function ($item) {
                 $requirements = $item['requirement'];
                 if (count($requirements) == 1) {
                     $requirements = explode("\n", $requirements[0]);
@@ -259,7 +263,7 @@ function kapi_product_import_to_woocommerce()
 
             // product activationDetails data Formating
             $formattedDetails = nl2br(htmlspecialchars($product_activationDetails));
-            
+
 
             // Update Product additional information 
             update_post_meta($product_id, '_product_developers', json_encode($product_developers));
@@ -341,15 +345,83 @@ function kapi_set_product_images($product_id, $images)
                     set_post_thumbnail($product_id, $attach_id);
                 }
 
-                // if not set post-thumbnail then set a random thumbnail from gallery
-                if (!has_post_thumbnail($product_id)) {
-                    if (!empty($gallery_ids)) {
-                        $random_attach_id = $gallery_ids[array_rand($gallery_ids)];
-                        set_post_thumbnail($product_id, $random_attach_id);
-                    }
-                }
+                // // if not set post-thumbnail then set a random thumbnail from gallery
+                // if (!has_post_thumbnail($product_id)) {
+                //     if (!empty($gallery_ids)) {
+                //         $random_attach_id = $gallery_ids[array_rand($gallery_ids)];
+                //         set_post_thumbnail($product_id, $random_attach_id);
+                //     }
+                // }
 
             }
         }
     }
 }
+
+// // Set wocommerce Product Thumbnail function
+function set_featured_image_for_product($product_id, $image_url) {
+    // Check if image URL is not empty
+    if (empty($image_url)) {
+        echo 'Error: Image URL is empty.';
+        return false; // Indicate failure
+    }
+
+    // Extract image name from URL
+    $image_name = basename($image_url);
+
+    // Get WordPress upload directory
+    $upload_dir = wp_upload_dir();
+    $upload_path = $upload_dir['path'];
+    $upload_url = $upload_dir['url'];
+
+    // Download the image from URL and save it to the upload directory
+    $image_data = file_get_contents($image_url);
+
+    if ($image_data !== false) {
+        $image_file = $upload_path . '/' . $image_name;
+        file_put_contents($image_file, $image_data);
+
+        // Prepare image data to be attached to the product
+        $file_path = $upload_path . '/' . $image_name;
+        $file_name = basename($file_path);
+
+        // Insert the image as an attachment
+        $attachment = [
+            'post_mime_type' => mime_content_type($file_path),
+            'post_title' => preg_replace('/\.[^.]+$/', '', $file_name),
+            'post_content' => '',
+            'post_status' => 'inherit',
+        ];
+
+        // Insert the attachment into the WordPress media library
+        $attach_id = wp_insert_attachment($attachment, $file_path, $product_id);
+
+        if (!is_wp_error($attach_id)) {
+            // Generate attachment metadata
+            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            $attachment_data = wp_generate_attachment_metadata($attach_id, $file_path);
+            wp_update_attachment_metadata($attach_id, $attachment_data);
+
+            // Set the attachment as the product's featured image
+            set_post_thumbnail($product_id, $attach_id);
+
+            return true; // Indicate success
+        } else {
+            // Handle errors
+            echo 'Error inserting attachment: ' . $attach_id->get_error_message();
+        }
+    } else {
+        echo 'Error downloading image.';
+    }
+
+    return false; // Indicate failure
+}
+
+
+
+
+
+
+
+
+
