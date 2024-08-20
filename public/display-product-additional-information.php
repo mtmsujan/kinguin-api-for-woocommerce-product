@@ -82,6 +82,7 @@ function custom_product_tab_content() {
         '_product_systemRequirements' => __('System Requirements', 'kinguin-api-for-woocommerce-product'),
         '_product_activationDetails' => __('Key Activation', 'kinguin-api-for-woocommerce-product'),
         '_product_languages' => __('Languages', 'kinguin-api-for-woocommerce-product'),
+        '_product_releaseDate' => __('Release Date', 'kinguin-api-for-woocommerce-product'),
     ];
 
     // Loop through each meta field
@@ -116,10 +117,14 @@ function custom_product_tab_content() {
                 $meta_value = json_decode($meta_value, true);
                 echo '<h3>' . $label . '</h3>';
                 echo '<p>' . (is_array($meta_value) ? implode(', ', $meta_value) : '') . '</p>';
-            } else {
-                $activationDetails = $meta_value; 
+            }elseif($meta_key === '_product_languages'){
+                $activationDetails = $meta_value;
                 echo '<h3>' . $label . '</h3>';
                 echo $activationDetails;
+            }else {
+                $release_date = $meta_value; 
+                echo '<h3>' . $label . '</h3>';
+                echo "Release date: " . wp_date('m/d/Y', strtotime($release_date));
             }
         }
     }
