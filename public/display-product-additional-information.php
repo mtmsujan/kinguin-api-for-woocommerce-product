@@ -117,7 +117,7 @@ function custom_product_tab_content() {
                 $meta_value = json_decode($meta_value, true);
                 echo '<h3>' . $label . '</h3>';
                 echo '<p>' . (is_array($meta_value) ? implode(', ', $meta_value) : '') . '</p>';
-            }elseif($meta_key === '_product_languages'){
+            }elseif($meta_key === '_product_activationDetails'){
                 $activationDetails = $meta_value;
                 echo '<h3>' . $label . '</h3>';
                 echo $activationDetails;
